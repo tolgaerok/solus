@@ -37,7 +37,7 @@
 
     if [[ $remote_url == *"git@github.com"* ]]; then
         echo ""
-        echo "Remote URL is set to SSH. Proceeding with the script..." | lolcat
+        echo "Remote URL is set to SSH. Proceeding with the script..." 
         echo ""
     else
         echo "Remote URL is not set to SSH. Please set up SSH key-based authentication for the remote repository."

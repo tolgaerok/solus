@@ -34,6 +34,12 @@ ssh -T git@github.com
 # Fetch the latest changes from the remote repository
 echo "Fetching latest changes from remote repository..."
 git fetch origin
+git pull origin main
+
+git push origin main
+
+git commit --amend
+git rebase --continue
 
 # Check if the local branch is tracking the remote branch
 if [ -z "$(git config --get branch.main.remote)" ]; then

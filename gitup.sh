@@ -87,10 +87,10 @@
         # Push changes to the main branch
         echo "Pushing changes to remote repository..."
         git push origin main
-        figlet files && figlet uploaded
+        echo "Files uploaded"
     else
         echo "No changes to commit."
-        figlet Nothing to && figlet Upload
+        echo "Nothing to Upload"
     fi        
 
     end_time=$(date +%s)

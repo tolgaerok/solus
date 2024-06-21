@@ -1,6 +1,5 @@
 #!/bin/bash
-# Tolga Erok
-# WTF GITHUB SETUP
+# MyGitSetup.sh
 
 # Define variables
 REPO_DIR="/home/tolga/Documents/MyGit"
@@ -48,23 +47,33 @@ fi
 echo "Fetching latest changes from remote repository..."
 git fetch origin
 
-# Check if there's a rebase in progress and continue if so
-if git rebase --continue; then
-    echo "Rebase continued."
+# Check if there are conflicts after fetch
+if git status | grep -q "Unmerged paths"; then
+    echo "Merge conflicts detected after fetch. Please resolve conflicts manually."
+    exit 1
 fi
 
-git pull origin main
-git push origin main
+# Ensure we are on the main branch
+git checkout main
 
-# Check if the local branch is tracking the remote branch
-if [ -z "$(git config --get branch.main.remote)" ]; then
-    echo "Setting upstream for the main branch..."
-    git branch --set-upstream-to=origin/main main
+# Handle ongoing rebase if detected
+if [ -d ".git/rebase-merge" ]; then
+    echo "Existing rebase in progress. Cleaning up..."
+    git rebase --abort
 fi
 
-# Pull the latest changes from the remote repository
+# Attempt to pull the latest changes from the remote repository
 echo "Pulling latest changes from remote repository..."
-git pull --rebase
+if ! git pull --rebase; then
+    # Check if pull failed due to conflicts
+    if git status | grep -q "Unmerged paths"; then
+        echo "Merge conflicts detected during pull. Please resolve conflicts manually."
+        exit 1
+    else
+        echo "Error: Failed to pull changes."
+        exit 1
+    fi
+fi
 
 # Add, commit, and push changes to remote repository
 echo "Pushing changes to remote repository..."

@@ -35,7 +35,7 @@ display_message() {
 # Ask for the username
 display_message "[${GREEN}✔${NC}] User-name required"
 echo ""
-read -p "Nix package manager wants a username to install the nix package manager to. 
+read -p "Nix package manager wants a username to install the nix package manager to.
 Enter Name: " username
 
 # setup nix pkgs on solus
@@ -196,9 +196,6 @@ apply_samba() {
 
 }
 
-# Call the function
-apply_samba
-
 apply_solus_tweaks() {
 
     clear
@@ -246,6 +243,10 @@ apply_solus_tweaks() {
     # echo 'net.ipv4.tcp_congestion_control = westwood' | sudo tee /etc/sysctl.d/99-custom.conf
 
     display_message "[${GREEN}✔${NC}] Setting up I/O Scheduler for SSD"
+
+    # Create udev rule for I/O scheduler
+    sudo mkdir -p /etc/udev/rules.d/
+
     # Create udev rule for I/O scheduler
     echo 'ACTION=="add|change", KERNEL=="sda", ATTR{queue/scheduler}="none"' | sudo tee /etc/udev/rules.d/60-scheduler.rules
     sleep 1.5

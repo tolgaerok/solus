@@ -26,7 +26,7 @@
     if [ ! -d "$REPO_DIR/.git" ]; then
         echo "Initializing Git repository in $REPO_DIR..."
         git init "$REPO_DIR"
-        git remote add origin git@github.com:tolgaerok/nixos-2405-gnome.git
+        git remote add origin git@github.com:tolgaerok/solus.git
     fi
 
     # Check if the remote URL is set to SSH
@@ -37,7 +37,7 @@
 
     if [[ $remote_url == *"git@github.com"* ]]; then
         echo ""
-        echo "Remote URL is set to SSH. Proceeding with the script..." 
+        echo "Remote URL is set to SSH. Proceeding with the script..." | lolcat
         echo ""
     else
         echo "Remote URL is not set to SSH. Please set up SSH key-based authentication for the remote repository."
@@ -87,10 +87,10 @@
         # Push changes to the main branch
         echo "Pushing changes to remote repository..."
         git push origin main
-        echo "Files uploaded"
+       echo " files && figlet uploaded"
     else
         echo "No changes to commit."
-        echo "Nothing to Upload"
+        echo " Nothing to && figlet Upload"
     fi        
 
     end_time=$(date +%s)

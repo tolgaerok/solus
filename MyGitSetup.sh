@@ -1,4 +1,6 @@
 #!/bin/bash
+# Tolga Erok
+# WTF GITHUB SETUP
 
 # Ensure we're in the correct directory
 cd /home/tolga/Documents/MyGit || exit

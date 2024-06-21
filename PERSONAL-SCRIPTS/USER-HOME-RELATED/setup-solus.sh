@@ -148,16 +148,56 @@ apply_templates() {
 
 apply_samba() {
     display_message "[${GREEN}✔${NC}] Setting up smb and nmb for system"
+    echo -e "\\033[34;1mCreate SMB user and SMB group\\033[0m"
+    echo -e "\\033[34;1mBy \\033[33mTolga Erok\\033[0m"
+
+    # Function to read user input and prompt for input
+    prompt_input() {
+        read -p "$1" value
+        echo "$value"
+    }
+
+    # Create user/group
+
+    # Prompt for the desired username and group for Samba
+    sambausername=$(prompt_input $'\nEnter the USERNAME to add to Samba: ')
+    sambagroup=$(prompt_input $'\nEnter the GROUP name to add username to Samba: ')
+
+    echo ""
+
+    # Create Samba user and group
+    sudo groupadd "$sambagroup"
+    sudo useradd -m "$sambausername"
+    sudo smbpasswd -a "$sambausername"
+    sudo usermod -aG "$sambagroup" "$sambausername"
+    sudo smbpasswd -e "$sambausername"
+
+    sleep 1
+    # Location of private Samba folder
+    shared_folder="/home/SolusOS"
+    echo ""
+
+    # Create and configure the shared folder
+    echo -e "\\033[34;1m ¯\_(ツ)_/¯ \\033[0m Setting up private Samba folder \n"
+
+    sudo mkdir -p "$shared_folder"
+    sudo chgrp "$sambagroup" "$shared_folder"
+    sudo chmod 0757 "$shared_folder"
+    sudo chown -R "$sambausername":"$sambagroup" "$shared_folder"
+
+    # Pause and continue
+    echo -e "\nContinuing..."
+    read -r -n 1 -s -t 1
+    sleep 1
     sudo systemctl enable --now smb
     sudo systemctl enable --now nmb
-    sudo smbpasswd -a tolga
-    sudo groupadd samba
-    sudo usermod -aG samba tolga
-    sudo smbpasswd -e tolga
     sudo systemctl restart smb
     sudo systemctl restart nmb
-    groups tolga
+
 }
+
+# Call the function
+apply_samba
 
 apply_solus_tweaks() {
 

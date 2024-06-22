@@ -1,5 +1,8 @@
 #!/bin/bash
 # MyGitSetup.sh
+# Tolga Erok 
+# 20 Jun 2024
+
 
 # Define variables
 REPO_DIR="/home/tolga/Documents/MyGit"

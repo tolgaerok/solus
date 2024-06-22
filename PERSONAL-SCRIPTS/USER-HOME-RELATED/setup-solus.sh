@@ -67,6 +67,11 @@ echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.gum pk
 # Source the modified .bashrc to apply changes without restarting the shell
 source /home/$username/.bashrc
 
+nix-env -iA nixpkgs.direnv
+nix-env -iA nixpkgs.lolcat
+nix-env -iA nixpkgs.fortune
+nix-env -iA nixpkgs.duf
+
 sleep 1
 
 display_message "[${GREEN}✔${NC}] Finished"

@@ -261,7 +261,7 @@ apply_solus_tweaks() {
     display_message "[${GREEN}✔${NC}]Setting up kernel tweaks"
     sleep 2
 
-    KERNEL_PARAMS="io_delay=none rootdelay=0 threadirqs irqaffinity noirqdebug iomem=relaxed mitigations=off zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=10 zswap.zpool=zsmalloc"
+    KERNEL_PARAMS="io_delay=none rootdelay=0 threadirqs irqaffinity noirqdebug iomem=relaxed mitigations=off zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=10 zswap.zpool=zsmalloc pti=off"
 
     # Personal conf file to be created
     KERNEL_PARAMS_FILE="/etc/kernel/cmdline.d/custom-kernel-parm.conf"
@@ -425,21 +425,30 @@ alias tolga-batt='clear && echo "Battery: $(acpi -b | awk '\''{print $3}'\'')" &
 alias tolga-sess='session=$XDG_SESSION_TYPE && echo "" && gum spin --spinner dot --title "Current XDG session is: [ $session ] """ -- sleep 2'
 
 ###---------- Nvidia session ----------###
-
-export LIBVA_DRIVER_NAME=nvidia              # Specifies the VA-API driver to use for hardware acceleration
+export LIBVA_DRIVER_NAME=nvidia                  # Specifies the VA-API driver to use for hardware acceleration
 export WLR_NO_HARDWARE_CURSORS=1             # Disables hardware cursors for Wayland to avoid issues with some Nvidia drivers
 export __GLX_VENDOR_LIBRARY_NAME=nvidia      # Specifies the GLX vendor library to use, ensuring Nvidia's library is used
 export __GL_SHADER_CACHE=1                   # Enables the GL shader cache, which can improve performance by caching compiled shaders
 export __GL_THREADED_OPTIMIZATION=1          # Enables threaded optimization in Nvidia's OpenGL driver for better performance
-export CLUTTER_BACKEND=wayland               # Specifies Wayland as the backend for Clutter
-export MOZ_ENABLE_WAYLAND=1                  # Enables Wayland support in Mozilla applications (e.g., Firefox)
-export NIXOS_OZONE_WL=1                      # Enables the Ozone Wayland backend for Chromium-based browsers
-export NIXPKGS_ALLOW_UNFREE=1                # Allows the installation of packages with unfree licenses in Nixpkgs
-export QT_WAYLAND_DISABLE_WINDOWDECORATION=1 # Disables window decorations in Qt applications when using Wayland
-export SDL_VIDEODRIVER=wayland               # Sets the video driver for SDL applications to Wayland
-export MOZ_DBUS_REMOTE=1
-export MOZ_ALLOW_DOWNGRADE=1                 # Don't throw "old profile" dialog box.
 
+
+###---------- Misc envir setings ------###
+# export GTK_MODULES=canberra-gtk-module           # Module for playing event sounds in GTK applications
+# export QT_QPA_PLATFORM=xcb                      # Specifies XCB as the Qt platform plugin
+# export QT_SESSION_MANAGER=0                     # Disables the session manager for Qt applications
+export CLUTTER_BACKEND=wayland                   # Specifies Wayland as the backend for Clutter
+export MOZ_ALLOW_DOWNGRADE=1                     # Allows downgrading profiles in Mozilla applications
+export MOZ_DBUS_REMOTE=1                         # Enables remote D-Bus communication in Mozilla applications
+export MOZ_ENABLE_WAYLAND=1                      # Enables Wayland support in Mozilla applications (e.g., Firefox)
+export NIXOS_OZONE_WL=1                          # Enables the Ozone Wayland backend for Chromium-based browsers
+export NIXPKGS_ALLOW_UNFREE=1                    # Allows the installation of packages with unfree licenses in Nixpkgs
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1     # Disables window decorations in Qt applications when using Wayland
+export SDL_VIDEODRIVER=wayland                   # Sets the video driver for SDL applications to Wayland
+
+###---------- Temporarily disable --######
+# unset QT_QPA_PLATFORM
+# unset QT_SESSION_MANAGER
+# unset GTK_MODULES
 ###---------- BTRFS TOOLS ----------######
 alias tolga-balance-home="sudo btrfs balance start /home && sudo btrfs balance status /home"
 alias tolga-balance-root="sudo btrfs balance start / && sudo btrfs balance status /"
@@ -537,6 +546,12 @@ cl && echo "" && fortune | lolcat && echo ""
 #. /home/tolga/.nix-profile/etc/profile.d/nix.sh
 
 alias gitup="$HOME/Documents/gitup.sh"
+
+###---------- Solus related ----------###
+alias tolga-solus='sudo mount -a && sudo systemctl daemon-reload && sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system'
+alias gitup="$HOME/Documents/gitup.sh"
+alias boot="sudo clr-boot-manager mount-boot && cd /boot/loader && sudo gedit loader.conf"
+alias cmdline="cd /etc/kernel/cmdline.d/ && sudo gedit custom-kernel-parm.conf"
 
 EOF
 )

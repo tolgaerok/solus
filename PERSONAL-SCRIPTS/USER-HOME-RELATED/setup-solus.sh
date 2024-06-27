@@ -427,6 +427,7 @@ alias tolga-sess='session=$XDG_SESSION_TYPE && echo "" && gum spin --spinner dot
 ###---------- Nvidia session ----------###
 export LIBVA_DRIVER_NAME=nvidia                  # Specifies the VA-API driver to use for hardware acceleration
 export WLR_NO_HARDWARE_CURSORS=1             # Disables hardware cursors for Wayland to avoid issues with some Nvidia drivers
+export WLR_RENDERER_ALLOW_SOFTWARE=1
 export __GLX_VENDOR_LIBRARY_NAME=nvidia      # Specifies the GLX vendor library to use, ensuring Nvidia's library is used
 export __GL_SHADER_CACHE=1                   # Enables the GL shader cache, which can improve performance by caching compiled shaders
 export __GL_THREADED_OPTIMIZATION=1          # Enables threaded optimization in Nvidia's OpenGL driver for better performance
@@ -436,6 +437,7 @@ export __GL_THREADED_OPTIMIZATION=1          # Enables threaded optimization in 
 # export GTK_MODULES=canberra-gtk-module           # Module for playing event sounds in GTK applications
 # export QT_QPA_PLATFORM=xcb                      # Specifies XCB as the Qt platform plugin
 # export QT_SESSION_MANAGER=0                     # Disables the session manager for Qt applications
+
 export CLUTTER_BACKEND=wayland                   # Specifies Wayland as the backend for Clutter
 export MOZ_ALLOW_DOWNGRADE=1                     # Allows downgrading profiles in Mozilla applications
 export MOZ_DBUS_REMOTE=1                         # Enables remote D-Bus communication in Mozilla applications
@@ -449,6 +451,7 @@ export SDL_VIDEODRIVER=wayland                   # Sets the video driver for SDL
 # unset QT_QPA_PLATFORM
 # unset QT_SESSION_MANAGER
 # unset GTK_MODULES
+
 ###---------- BTRFS TOOLS ----------######
 alias tolga-balance-home="sudo btrfs balance start /home && sudo btrfs balance status /home"
 alias tolga-balance-root="sudo btrfs balance start / && sudo btrfs balance status /"

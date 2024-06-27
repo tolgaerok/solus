@@ -425,27 +425,26 @@ alias tolga-batt='clear && echo "Battery: $(acpi -b | awk '\''{print $3}'\'')" &
 alias tolga-sess='session=$XDG_SESSION_TYPE && echo "" && gum spin --spinner dot --title "Current XDG session is: [ $session ] """ -- sleep 2'
 
 ###---------- Nvidia session ----------###
-export LIBVA_DRIVER_NAME=nvidia                  # Specifies the VA-API driver to use for hardware acceleration
-export WLR_NO_HARDWARE_CURSORS=1             # Disables hardware cursors for Wayland to avoid issues with some Nvidia drivers
-export WLR_RENDERER_ALLOW_SOFTWARE=1
-export __GLX_VENDOR_LIBRARY_NAME=nvidia      # Specifies the GLX vendor library to use, ensuring Nvidia's library is used
-export __GL_SHADER_CACHE=1                   # Enables the GL shader cache, which can improve performance by caching compiled shaders
-export __GL_THREADED_OPTIMIZATION=1          # Enables threaded optimization in Nvidia's OpenGL driver for better performance
+export LIBVA_DRIVER_NAME=nvidia                    # Specifies the VA-API driver to use for hardware acceleration
+export WLR_NO_HARDWARE_CURSORS=1                  # Disables hardware cursors for Wayland to avoid issues with some Nvidia drivers
+# export WLR_RENDERER_ALLOW_SOFTWARE=1            # Uncomment this line if needed for wlroots-based compositors
+export __GLX_VENDOR_LIBRARY_NAME=nvidia           # Specifies the GLX vendor library to use, ensuring Nvidia's library is used
+export __GL_SHADER_CACHE=1                        # Enables the GL shader cache, which can improve performance by caching compiled shaders
+export __GL_THREADED_OPTIMIZATION=1               # Enables threaded optimization in Nvidia's OpenGL driver for better performance
 
+###---------- Misc environment settings ----------###
+# export GTK_MODULES=canberra-gtk-module          # Module for playing event sounds in GTK applications
+# export QT_QPA_PLATFORM=xcb                     # Specifies XCB as the Qt platform plugin
+# export QT_SESSION_MANAGER=0                    # Disables the session manager for Qt applications
 
-###---------- Misc envir setings ------###
-# export GTK_MODULES=canberra-gtk-module           # Module for playing event sounds in GTK applications
-# export QT_QPA_PLATFORM=xcb                      # Specifies XCB as the Qt platform plugin
-# export QT_SESSION_MANAGER=0                     # Disables the session manager for Qt applications
-
-export CLUTTER_BACKEND=wayland                   # Specifies Wayland as the backend for Clutter
-export MOZ_ALLOW_DOWNGRADE=1                     # Allows downgrading profiles in Mozilla applications
-export MOZ_DBUS_REMOTE=1                         # Enables remote D-Bus communication in Mozilla applications
-export MOZ_ENABLE_WAYLAND=1                      # Enables Wayland support in Mozilla applications (e.g., Firefox)
-export NIXOS_OZONE_WL=1                          # Enables the Ozone Wayland backend for Chromium-based browsers
-export NIXPKGS_ALLOW_UNFREE=1                    # Allows the installation of packages with unfree licenses in Nixpkgs
-export QT_WAYLAND_DISABLE_WINDOWDECORATION=1     # Disables window decorations in Qt applications when using Wayland
-export SDL_VIDEODRIVER=wayland                   # Sets the video driver for SDL applications to Wayland
+export CLUTTER_BACKEND=wayland                    # Specifies Wayland as the backend for Clutter
+export MOZ_ALLOW_DOWNGRADE=1                      # Allows downgrading profiles in Mozilla applications
+export MOZ_DBUS_REMOTE=1                          # Enables remote D-Bus communication in Mozilla applications
+export MOZ_ENABLE_WAYLAND=1                       # Enables Wayland support in Mozilla applications (e.g., Firefox)
+export NIXOS_OZONE_WL=1                           # Enables the Ozone Wayland backend for Chromium-based browsers
+export NIXPKGS_ALLOW_UNFREE=1                     # Allows the installation of packages with unfree licenses in Nixpkgs
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1      # Disables window decorations in Qt applications when using Wayland
+export SDL_VIDEODRIVER=wayland                    # Sets the video driver for SDL applications to Wayland
 
 ###---------- Temporarily disable --######
 # unset QT_QPA_PLATFORM

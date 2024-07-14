@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tolga Erok
 # 21 Jun 2024
-# Personal Solus setup script..
+# Personal Solus setup script...
 
 clear
 

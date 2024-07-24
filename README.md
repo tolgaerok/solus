@@ -1,5 +1,38 @@
 # solus
 Personal Solus repo
+#
+Setup git - very painful
+
+```bash
+# Generate an SSH key
+ssh-keygen -t rsa -b 4096 -C "kingtolga@gmail.com"
+
+# Start the SSH agent
+eval "$(ssh-agent -s)"
+
+# Add the SSH key to the SSH agent
+ssh-add ~/.ssh/id_rsa
+
+# Copy the SSH key to clipboard
+cat ~/.ssh/id_rsa.pub | xclip -selection clipboard
+
+# Test the SSH connection to GitHub
+ssh -T git@github.com
+
+# Set the default branch name to 'main'
+git config --global init.defaultBranch main
+
+# Rename the current branch to 'main'
+git branch -m main
+
+# Add a remote repository
+git remote add origin git@github.com:tolgaerok/solus.git
+
+# Verify the remote URL
+git remote -v
+
+```
+
 
 ### About
 - Contained in this repo are a collection of my personal scripts to setup and tweak the current solus installation

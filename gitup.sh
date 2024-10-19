@@ -32,27 +32,34 @@ fi
 # Check if the remote URL is set to SSH
 remote_url=$(git -C "$REPO_DIR" remote get-url origin)
 
+if [[ $remote_url != *"git@github.com"* ]]; then
+    echo "Remote URL is not set to SSH. Updating it to SSH..."
+    git -C "$REPO_DIR" remote set-url origin git@github.com:tolgaerok/solus.git
+    echo "Remote URL updated to SSH."
+fi
+
+# Ensure SSH key is set up
+if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
+    echo "SSH key not found, generating a new one..."
+    ssh-keygen -t ed25519 -C "kingtolga@gmail.com"
+    
+    # Start SSH agent and add key
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519
+
+    # Display the SSH public key to the user to add it to GitHub
+    echo "Please add this SSH public key to your GitHub account:"
+    cat ~/.ssh/id_ed25519.pub
+    echo "Once added, press [ENTER] to continue..."
+    read -r
+else
+    # Start SSH agent and ensure key is added
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519
+fi
+
 # Configure Git credential helper to cache credentials for 1 hour
 git config --global credential.helper "cache --timeout=3600"
-
-if [[ $remote_url == *"git@github.com"* ]]; then
-    echo ""
-    echo "Remote URL is set to SSH. Proceeding with the script..."
-    echo ""
-else
-    echo "Remote URL is not set to SSH. Please set up SSH key-based authentication for the remote repository."
-    echo "If you haven't already, generate an SSH key pair:"
-    echo "ssh-keygen -t ed25519 -C 'your email'"
-    echo "Add your SSH key to the agent:"
-    echo "eval \$(ssh-agent -s)"
-    echo "ssh-add ~/.ssh/id_ed25519"
-    echo "Then, add your SSH public key to your GitHub account:"
-    echo "cat ~/.ssh/id_ed25519.pub"
-    echo "Finally, update your Git configuration to use SSH:"
-    echo "git config --global credential.helper store"
-    echo "Remote URL needs to be updated to SSH. Exiting..."
-    exit 1
-fi
 
 # Navigate to the repository directory
 cd "$REPO_DIR" || exit

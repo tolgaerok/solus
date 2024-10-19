@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tolga Erok
 # 10/6/2024
-# git uploader version #2
+# git uploader version #3  19 oct 2024
 
 set -e
 
@@ -22,14 +22,14 @@ git config --global core.deltaBaseCacheLimit 2g
 git config --global diff.algorithm histogram
 git config --global http.postBuffer 524288000
 
-# Ensure the Git repository is initialized
+# Git initialize
 if [ ! -d "$REPO_DIR/.git" ]; then
     echo "Initializing Git repository in $REPO_DIR..."
     git init "$REPO_DIR"
     git remote add origin git@github.com:tolgaerok/solus.git
 fi
 
-# Check if the remote URL is set to SSH
+# set to SSH
 remote_url=$(git -C "$REPO_DIR" remote get-url origin)
 
 if [[ $remote_url != *"git@github.com"* ]]; then
@@ -38,7 +38,7 @@ if [[ $remote_url != *"git@github.com"* ]]; then
     echo "Remote URL updated to SSH."
 fi
 
-# Ensure SSH key is set up
+# Setup SSH key is set upp
 if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
     echo "SSH key not found, generating a new one..."
     ssh-keygen -t ed25519 -C "kingtolga@gmail.com"
@@ -47,7 +47,7 @@ if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_ed25519
 
-    # Display the SSH public key to the user to add it to GitHub
+    # Display the SSH public key
     echo "Please add this SSH public key to your GitHub account:"
     cat ~/.ssh/id_ed25519.pub
     echo "Once added, press [ENTER] to continue..."
@@ -71,7 +71,7 @@ if [ -d "$REPO_DIR/.git/rebase-merge" ]; then
     exit 1
 fi
 
-# Print the current working directory for debugging
+# for debugging
 echo "Current working directory: $(pwd)"
 
 # Add all changes
@@ -84,14 +84,9 @@ git status
 # Check if there are changes to commit
 if git status --porcelain | grep -qE '^\s*[MARCDU]'; then
     echo "Changes detected, committing..."
-    # Commit changes with custom message
-    git commit -am "$COMMIT_MSG"
-
-    # Pull changes from the remote repository to avoid conflicts
+    git commit -am "$COMMIT_MSG"   
     echo "Pulling changes from remote repository..."
-    git pull --rebase origin main
-
-    # Push changes to the main branch
+    git pull --rebase origin main    
     echo "Pushing changes to remote repository..."
     git push origin main
     echo "Files uploaded"

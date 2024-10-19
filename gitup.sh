@@ -5,10 +5,6 @@
 
 set -e
 
-# Personal nixos git folder uploader!!
-# Tolga Erok. ¯\\_(ツ)_/¯..
-# 20/8/23.
-
 start_time=$(date +%s)
 # Directory of your Git repository
 REPO_DIR="/home/tolga/Documents/MyGit"

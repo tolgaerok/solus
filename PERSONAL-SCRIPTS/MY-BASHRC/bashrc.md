@@ -224,4 +224,8 @@ cl && echo "" && fortune | lolcat && echo ""
 #. /home/tolga/.nix-profile/etc/profile.d/nix.sh
 
 alias gitup="$HOME/Documents/gitup.sh"
+cl && echo "" && fortune | lolcat && echo ""
+
+alias fastfetch='BLUEFIN_FETCH_LOGO=$(find $HOME/.config/fastfetch/logo/* | /usr/bin/shuf -n 1) && rm -rf $HOME/.cache/fastfetch && /usr/bin/fastfetch --logo $BLUEFIN_FETCH_LOGO -c $HOME/.config/fastfetch/config.jsonc'
+alias cake="sudo tc -s qdisc show dev wlp3s0 && sudo systemctl status apply-cake-qdisc.service"
 ```

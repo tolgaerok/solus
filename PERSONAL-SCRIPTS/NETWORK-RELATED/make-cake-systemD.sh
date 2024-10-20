@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tolga Erok
-# systemd to force CAKE onto active wireless interface
+# systemd to force CAKE onto active wireless interface.
 # 19 Oct 2024
 
 YELLOW="\033[1;33m"

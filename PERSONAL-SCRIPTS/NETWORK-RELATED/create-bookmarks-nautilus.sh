@@ -50,7 +50,7 @@ echo "Mounting $CIFS_SERVER to $MOUNT_POINT..."
 sudo mount -t cifs $CIFS_SERVER $MOUNT_POINT -o credentials=$CREDENTIALS_FILE,uid=$USER_UID,gid=$GROUP_GID,file_mode=$FILE_MODE,dir_mode=$DIR_MODE,vers=$VERS -v
 
 # Check if the mount was successful
-if mount | grep $MOUNT_POINT > /dev/null; then
+if mount | grep $MOUNT_POINT >/dev/null; then
   echo "Successfully mounted $CIFS_SERVER to $MOUNT_POINT."
 else
   echo "Failed to mount $CIFS_SERVER to $MOUNT_POINT."
@@ -59,7 +59,7 @@ fi
 
 # Add to Nautilus bookmarks
 if ! grep -q "file://$MOUNT_POINT" $BOOKMARKS_FILE; then
-  echo "file://$MOUNT_POINT $MOUNT_POINT_NAME" >> $BOOKMARKS_FILE
+  echo "file://$MOUNT_POINT $MOUNT_POINT_NAME" >>$BOOKMARKS_FILE
   echo "Added $MOUNT_POINT to Nautilus bookmarks."
 fi
 

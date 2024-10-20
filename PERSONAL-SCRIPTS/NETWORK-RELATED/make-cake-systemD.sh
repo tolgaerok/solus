@@ -25,6 +25,8 @@ echo -e "${BLUE}Creating systemd service file at ${SERVICE_FILE}...${NC}"
 sudo bash -c "cat > $SERVICE_FILE" <<EOF
 [Unit]
 Description=Apply CAKE qdisc to $interface
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
@@ -49,5 +51,8 @@ sudo tc qdisc show dev "$interface"
 
 echo -e "${YELLOW}CAKE qdisc should be applied to ${interface} now.${NC}"
 
-sudo tc -s qdisc show dev wlp3s0
+# Show detailed qdisc status for the interface
+sudo tc -s qdisc show dev "$interface"
+
+# Check the status of the systemd service
 sudo systemctl status apply-cake-qdisc.service

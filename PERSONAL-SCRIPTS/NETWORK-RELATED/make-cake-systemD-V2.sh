@@ -2,14 +2,13 @@
 # Tolga Erok
 # systemd to force CAKE onto any active network interface.
 # 19 Oct 2024
-# Version 2
 
 YELLOW="\033[1;33m"
 BLUE="\033[0;34m"
 RED="\033[0;31m"
 NC="\033[0m"
 
-# Detect any active network interface
+# Detect any active network interface (uplink or wireless) and trim leading/trailing spaces
 interface=$(ip link show | awk -F: '$0 ~ "^[2-9]:|^[1-9][0-9]: " && $0 ~ "UP" && $0 !~ "LOOPBACK|NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}')
 
 if [ -z "$interface" ]; then

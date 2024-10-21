@@ -228,4 +228,5 @@ cl && echo "" && fortune | lolcat && echo ""
 
 alias fastfetch='BLUEFIN_FETCH_LOGO=$(find $HOME/.config/fastfetch/logo/* | /usr/bin/shuf -n 1) && rm -rf $HOME/.cache/fastfetch && /usr/bin/fastfetch --logo $BLUEFIN_FETCH_LOGO -c $HOME/.config/fastfetch/config.jsonc'
 alias cake="sudo tc -s qdisc show dev wlp3s0 && sudo systemctl status apply-cake-qdisc.service"
+alias boot="sudo clr-boot-manager mount-boot && cd /boot/loader && sudo gedit loader.conf"
 ```

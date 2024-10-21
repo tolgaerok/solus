@@ -8,6 +8,8 @@
 clear
 
 # Assign a color variable based on the RANDOM number
+# ___________________________________________________
+
 # CYAN='\e[1;36m'
 # BLUE='\e[1;34m'
 # ORANGE='\e[1;93m'

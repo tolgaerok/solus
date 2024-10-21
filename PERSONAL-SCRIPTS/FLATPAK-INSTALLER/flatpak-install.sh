@@ -2,6 +2,8 @@
 # Tolga Erok
 # 16 Sep 2024....0333
 
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/FLATPAK-INSTALLER/flatpak-install.sh | sudo bash
+
 # Define colors and symbols
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

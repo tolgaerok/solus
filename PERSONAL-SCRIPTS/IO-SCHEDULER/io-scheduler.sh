@@ -1,6 +1,8 @@
 #!/bin/bash
 # tolga erok
 
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/IO-SCHEDULER/io-scheduler.sh | sudo bash
+
 # Create the systemd service file for setting the I/O scheduler
 echo "[Unit]
 Description=Set I/O Scheduler on boot

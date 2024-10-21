@@ -3,6 +3,8 @@
 # 21 Jun 2024
 # Personal Solus setup script...
 
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/setup-samba.sh | sudo bash
+
 clear
 
 # Assign a color variable based on the RANDOM number

@@ -1,16 +1,16 @@
 ```bash
 source /usr/share/defaults/etc/profile
-
-eval "$(direnv hook bash)"
+export PATH="$PATH:$HOME/local/bin"
+xhost +si:localuser:$USER
 ###---------- ALIASES ----------###
-# source ~/.bashrc
-
-# echo "" && fortune && echo ""
 
 alias tolga-alert='notify-send --urgency=low "$(history|tail -n1|sed -e "s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//")"'
 alias tolga-tolga='sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"'
 
 alias tolga-systcl="sudo /home/tolga/scripts/systcl.sh"
+
+alias gitup="$HOME/gitup.sh"
+
 
 ###---------- my tools ----------###
 alias tolga-htos="sudo ~/.config/MY-TOOLS/assets/scripts/Zysnc-Options/ZYSNC-HOME-TO-SERVER.sh"
@@ -57,7 +57,7 @@ alias tolga-rebootforce='sudo shutdown -r -n now'
 alias tolga-rebootsafe='sudo shutdown -r now'
 
 ###---------- Tools ----------###
-alias rc="source ~/.bashrc && clear && echo "" && fortune | lolcat  && echo """
+alias rc='source ~/.bashrc && clear && echo "" && fortune | lolcat  && echo ""'
 alias tolga-bashrc='kwrite  ~/.bashrc'
 alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
 alias tolga-fmem="echo && echo 'Current mem:' && free -h && sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' && echo && echo 'After: ' && free -h"
@@ -66,15 +66,133 @@ alias tolga-fstab="sudo mount -a && sudo systemctl daemon-reload && echo && echo
 alias tolga-grub="sudo grub2-mkconfig -o /boot/grub2/grub.cfg && sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg"
 alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-line="echo '## ------------------------------ ##'"
-# alias tolga-nvidia="sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo \"Force akmods and Dracut on nvidia done\" && echo"
 alias tolga-nvidia='sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo "Force akmods and Dracut on NVIDIA done" && echo'
 
 alias tolga-pdfcompress='bash /home/tolga/scripts/pdf1.sh'
-alias tolga-samba='echo "Restarting Samba" -- sleep 2 && sudo systemctl enable smb.service nmb.service && sudo systemctl restart smb.service nmb.service'
+alias tolga-samba='gum spin --spinner dot --title "Restarting Samba" -- sleep 2 && sudo systemctl enable smb.service nmb.service && sudo systemctl restart smb.service nmb.service'
 alias tolga-swapreload="cl && echo && echo 'Turning swap off:' && echo 'Turning swap on:' && tolga-line && sudo swapon --all && sudo swapon --show && echo && echo 'Reload Swap(s):' && tolga-line && sudo mount -a && sudo systemctl daemon-reload && sudo swapon --show && echo && echo 'Free memory:' && tolga-line && free -h && echo && duf && tolga-sys && tolga-fmem"
 alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && systemctl restart earlyoom && systemctl status earlyoom --no-pager"
 alias tolga-trim="sudo fstrim -av"
-alias tolga-update="sudo dnf5 update && sudo dnf update && flatpak update -y && flatpak uninstall --unused && flatpak uninstall --delete-data && [ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data --assumeyes"
+
+# Assign a color variable based on the RANDOM number
+RED='\e[1;31m'
+GREEN='\e[1;32m'
+YELLOW='\e[1;33m'
+BLUE='\e[1;34m'
+CYAN='\e[1;36m'
+WHITE='\e[1;37m'
+ORANGE='\e[1;93m'
+NC='\e[0m'
+YELLOW='\e[1;33m'
+NC='\e[0m'
+
+display_message() {
+    clear
+    echo -e "\n                  Tolga's cleanup && updater\n"
+    echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
+    echo -e "|${YELLOW}==>${NC}  $1"
+    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+    echo ""
+    gum spin --spinner dot --title "Stand-by..." -- sleep 1
+}
+
+# Debugging step: echo what will be passed to display_message
+echo "Calling display_message with: [${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
+display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
+
+countdown() {
+    local seconds=$1
+    local message=$2
+
+    echo -ne "${message} (Press Enter to skip): "
+
+    # Start a background process to handle user input
+    read -r -t $seconds -p "" && touch /tmp/skip_fstrim &
+
+    local pid=$!
+
+    while [ $seconds -gt 0 ]; do
+        if [ -e /tmp/skip_fstrim ]; then
+            echo -e "\nSkipping fstrim due to user input"
+            return
+        fi
+        echo -ne "$seconds\033[0K\r"
+        sleep 1
+        ((seconds--))
+    done
+    echo -ne "\n"
+
+    # Wait for the background read process to complete
+    wait $pid
+}
+
+cleanup_solus() {
+    # Clean package cache
+    display_message "[${GREEN}✔${NC}]  Time to clean up system..."
+    sudo eopkg clean
+
+    # Remove unnecessary dependencies
+    sudo eopkg rmf
+
+    display_message "[${GREEN}✔${NC}] Trimming all mount points on SSD"
+
+    countdown 3 "Starting fstrim"
+
+    # Check if input was received
+    if [ ! -e /tmp/skip_fstrim ]; then
+        echo "No input detected. Skipping fstrim."
+    else
+        # Run fstrim if no input was received
+        sudo fstrim -av
+    fi
+
+    echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
+
+    display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
+    #gum spin --spinner dot --title "Stand-by..." -- sleep 2
+    echo -e "\e[1;32m[✔]\e[0m Checking system updates .....\n" && \
+    sudo eopkg upgrade -y
+
+}
+
+alias tolga-update='
+echo -e "\e[1;32m[✔]\e[0m Network is metered. Rotating and vacuuming journal logs...\n" && \
+(sudo journalctl --rotate; sudo journalctl --vacuum-time=1s && sleep 1) && \
+sleep 1 && \
+cleanup_solus && \
+
+display_message "[\e[1;32m✔\e[0m]  Checking flatpaks" && \
+echo -e "\e[1;32m[✔]\e[0m Checking updates for installed flatpak programs...\n" && \
+sudo flatpak update --appstream && flatpak update && \
+sudo flatpak update -y && \
+sleep 1 && \
+echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n" && \
+flatpak uninstall --unused && \
+flatpak uninstall --delete-data && \
+sudo rm -rfv /var/tmp/flatpak-cache-* && \
+[ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data --assumeyes && \
+flatpak --user uninstall --unused -y --noninteractive && \
+/usr/bin/flatpak --user update -y --noninteractive && \
+/usr/bin/flatpak --user repair && \
+recache_fonts && \
+echo -e "\e[1;32m[✔]\e[0m All updates and cleanups are complete."'
+
+# recache all Flatpak and system fonts
+recache_fonts() {
+    echo -e "\e[1;32m[✔]\e[0m Recaching Flatpak fonts..."
+    flatpak repair --system || { echo -e "\e[1;31m[✘]\e[0m Failed to recache Flatpak fonts."; exit 1; }
+
+    echo -e "\e[1;32m[✔]\e[0m Recaching system fonts..."
+    sudo mkdir -p /usr/local/share/fonts
+    sudo chmod -R 755 /usr/local/share/fonts
+    sudo rm -rf /var/cache/fontconfig/*
+    sudo fc-cache -rv || { echo -e "\e[1;31m[✘]\e[0m Failed to recache system fonts."; exit 1; }
+
+    echo -e "\e[1;32m[✔]\e[0m Font cache update complete."
+}
+
+
 alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system && sudo sysctl -p && sudo mount -a && sudo systemctl daemon-reload"
 
 ###---------- file access ----------###
@@ -99,39 +217,72 @@ alias tolga-batt='clear && echo "Battery: $(acpi -b | awk '\''{print $3}'\'')" &
 alias tolga-sess='session=$XDG_SESSION_TYPE && echo "" && gum spin --spinner dot --title "Current XDG session is: [ $session ] """ -- sleep 2'
 
 ###---------- Nvidia session ----------###
-export LIBVA_DRIVER_NAME=nvidia                  # Specifies the VA-API driver to use for hardware acceleration
-export WLR_NO_HARDWARE_CURSORS=1             # Disables hardware cursors for Wayland to avoid issues with some Nvidia drivers
-export __GLX_VENDOR_LIBRARY_NAME=nvidia      # Specifies the GLX vendor library to use, ensuring Nvidia's library is used
-export __GL_SHADER_CACHE=1                   # Enables the GL shader cache, which can improve performance by caching compiled shaders
-export __GL_THREADED_OPTIMIZATION=1          # Enables threaded optimization in Nvidia's OpenGL driver for better performance
+export LIBVA_DRIVER_NAME=nvidia
+export WLR_NO_HARDWARE_CURSORS=1
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+export __GL_SHADER_CACHE=1
+export __GL_THREADED_OPTIMIZATION=1
 
+btrfs_balance_and_monitor() {
+  echo "Starting Btrfs balance for /home..."
+  sudo btrfs balance start -m -d /home
+  echo "Balance started. Monitoring status every 10 seconds..."
+  while true; do
+    echo "Checking balance status..."
+    sudo btrfs balance status /home
+    sleep 10
+  done
+}
 
-###---------- Misc envir setings ------###
-# export GTK_MODULES=canberra-gtk-module           # Module for playing event sounds in GTK applications
-# export QT_QPA_PLATFORM=xcb                      # Specifies XCB as the Qt platform plugin
-# export QT_SESSION_MANAGER=0                     # Disables the session manager for Qt applications
-export CLUTTER_BACKEND=wayland                   # Specifies Wayland as the backend for Clutter
-export MOZ_ALLOW_DOWNGRADE=1                     # Allows downgrading profiles in Mozilla applications
-export MOZ_DBUS_REMOTE=1                         # Enables remote D-Bus communication in Mozilla applications
-export MOZ_ENABLE_WAYLAND=1                      # Enables Wayland support in Mozilla applications (e.g., Firefox)
-export NIXOS_OZONE_WL=1                          # Enables the Ozone Wayland backend for Chromium-based browsers
-export NIXPKGS_ALLOW_UNFREE=1                    # Allows the installation of packages with unfree licenses in Nixpkgs
-export QT_WAYLAND_DISABLE_WINDOWDECORATION=1     # Disables window decorations in Qt applications when using Wayland
-export SDL_VIDEODRIVER=wayland                   # Sets the video driver for SDL applications to Wayland
-
-
-
-###---------- Temporarily disable --######
-# unset QT_QPA_PLATFORM
-# unset QT_SESSION_MANAGER
-# unset GTK_MODULES
-
+# Alias to run the function
+alias btrfs-home="btrfs_balance_and_monitor"
 
 ###---------- BTRFS TOOLS ----------######
 alias tolga-balance-home="sudo btrfs balance start /home && sudo btrfs balance status /home"
 alias tolga-balance-root="sudo btrfs balance start / && sudo btrfs balance status /"
 alias tolga-scrub-home="sudo btrfs scrub start /home && sudo btrfs scrub status /home"
 alias tolga-scrub-root="sudo btrfs scrub start / && sudo btrfs scrub status /"
+
+btrfs_manage() {
+    clear
+    echo ""
+    echo "###---------- BTRFS TOOLS ----------######"
+    echo "Choose an operation:"
+    echo "1) Balance /home"
+    echo "2) Balance /"
+    echo "3) Scrub /home"
+    echo "4) Scrub /"
+    echo "5) Exit"
+    read -p "Enter your choice [1-5]: " choice
+
+    case $choice in
+        1)
+            echo "Starting balance on /home..."
+            sudo btrfs balance start /home && sudo btrfs balance status /home
+            ;;
+        2)
+            echo "Starting balance on /..."
+            sudo btrfs balance start / && sudo btrfs balance status /
+            ;;
+        3)
+            echo "Starting scrub on /home..."
+            sudo btrfs scrub start /home && sudo btrfs scrub status /home
+            ;;
+        4)
+            echo "Starting scrub on /..."
+            sudo btrfs scrub start / && sudo btrfs scrub status /
+            ;;
+        5)
+            echo "Exiting."
+            return 0
+            ;;
+        *)
+            echo "Invalid option. Please choose a number between 1 and 5."
+            ;;
+    esac
+}
+
+alias btrfs-manage="btrfs_manage"
 
 ###---------- Konsole effects ----------###
 PS1="\[\e[1;m\]┌(\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]) \[\e[1;m\]➤\[\e[1;36m\] \W \[\e[1;m\] \n\[\e[1;m\]└\[\e[1;33m\]➤\[\e[0;m\]  "
@@ -141,62 +292,15 @@ PS1="\[\e[1;m\]┌(\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]) \[\e[1;m\]➤\[\e[1;
 # . /home/tolga/.nix-profile/etc/profile.d/nix.sh
 
 ###---------- Vscoding ----------###
-# eval "$(direnv hook bash)"
+eval "$(direnv hook bash)"
 
 ###---------- Solus related ----------###
 alias tolga-solus='sudo mount -a && sudo systemctl daemon-reload && sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system'
-
-# Function to generate a random color code
-random_color() {
-  echo $((16 + RANDOM % 216))
-}
-
-# Function to generate a random color code
-random_color() {
-  echo $((16 + RANDOM % 216))
-}
-
-# Define colors
-YELLOW=226
-WHITE=231
-BRIGHT_BLUE=81
-
-# Function to display fortune with random colors
-fortune_with_random_colors() {
-  local color
-  color=$(random_color)
-  printf "\033[38;5;%dm%s\033[0m\n" "$color" "$1"
-}
-
-# Check if the system is Solus
-if [ -f "/usr/bin/eopkg" ]; then
-  # Solus system
-  #nix-env -iA nixpkgs.lolcat
-  #nix-env -iA nixpkgs.fortune
-  export PATH="/home/tolga/.nix-profile/bin:$PATH"
-  . /home/tolga/.nix-profile/etc/profile.d/nix.sh
-  export PATH="/home/tolga/.nix-profile/bin:$PATH"
-  export PATH=$PATH:/usr/local/bin/direnv
-  export PATH="$HOME/.nix-profile/bin:$PATH"
-  export PATH="$HOME/.nix-profile/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-
-  FORTUNE_COMMAND="/home/tolga/.nix-profile/bin/fortune"
-else
-  # Other distro
-  FORTUNE_COMMAND="fortune"
-fi
-
-# Fetch the fortune message
-fortune_message="$($FORTUNE_COMMAND)"
-
-# Display the fortune message with random colors
-#echo "" && fortune_with_random_colors "$fortune_message" && echo ""
 
 # nix-env -iA nixpkgs.fortune
 # export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.megasync
 
 # don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
@@ -219,14 +323,48 @@ XDG_VIDEOS_DIR="$HOME/"
 XDG_TEMPLATES_DIR="$HOME/Templates"
 XDG_PUBLICSHARE_DIR="$HOME/Public"
 
-cl && echo "" && fortune | lolcat && echo ""
-#export PATH="/home/tolga/.nix-profile/bin:$PATH"
-#. /home/tolga/.nix-profile/etc/profile.d/nix.sh
+# Check whether if the windowing system is Xorg or Wayland windowing system and set environment variables accordingly
+# Tolga Erok
 
-alias gitup="$HOME/Documents/gitup.sh"
+if [[ ${XDG_SESSION_TYPE} == "wayland" ]]; then
+    export MOZ_ENABLE_WAYLAND=1
+    export OBS_USE_EGL=1
+    echo "Running on Wayland: Enabled Wayland-specific settings."
+    echo "" && sleep .1
+
+elif [[ ${XDG_SESSION_TYPE} == "x11" ]]; then
+    export MOZ_ENABLE_WAYLAND=0
+    export OBS_USE_EGL=0
+    echo "Running on Xorg: Disabled Wayland-specific settings."
+    echo "" && sleep .1
+else
+    echo "Unknown windowing system: ${XDG_SESSION_TYPE}. No changes made."
+    echo "" && sleep .1
+fi
+
+# Check if qt5ct is installed and set QT/Kvantum theme settings
+if command -v qt5ct &>/dev/null; then
+    export QT_QPA_PLATFORM="xcb"
+    export QT_QPA_PLATFORMTHEME="qt5ct"
+    echo "qt5ct is installed: QT settings applied."
+    echo "" && sleep .1
+else
+    echo "qt5ct is not installed: QT settings not applied."
+    echo "You can install qt5ct with: sudo dnf install qt5ct"
+    echo "" && sleep .1
+fi
+
 cl && echo "" && fortune | lolcat && echo ""
 
 alias fastfetch='BLUEFIN_FETCH_LOGO=$(find $HOME/.config/fastfetch/logo/* | /usr/bin/shuf -n 1) && rm -rf $HOME/.cache/fastfetch && /usr/bin/fastfetch --logo $BLUEFIN_FETCH_LOGO -c $HOME/.config/fastfetch/config.jsonc'
 alias cake="sudo tc -s qdisc show dev wlp3s0 && sudo systemctl status apply-cake-qdisc.service"
 alias boot="sudo clr-boot-manager mount-boot && cd /boot/loader && sudo nano loader.conf"
+alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}'\''); sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'
+
+
+
+. "$HOME/.atuin/bin/env"
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash)"
 ```

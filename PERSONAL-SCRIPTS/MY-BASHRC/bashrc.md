@@ -360,11 +360,10 @@ alias fastfetch='BLUEFIN_FETCH_LOGO=$(find $HOME/.config/fastfetch/logo/* | /usr
 alias cake="sudo tc -s qdisc show dev wlp3s0 && sudo systemctl status apply-cake-qdisc.service"
 alias boot="sudo clr-boot-manager mount-boot && cd /boot/loader && sudo nano loader.conf"
 alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}'\''); sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'
-
-
+alias grub-mod="sudo nano /etc/kernel/cmdline.d/mitigations.conf"
 
 . "$HOME/.atuin/bin/env"
-
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
+
 ```

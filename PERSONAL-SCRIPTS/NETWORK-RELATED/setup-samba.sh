@@ -8,16 +8,14 @@
 clear
 
 # Assign a color variable based on the RANDOM number
-RED='\e[1;31m'
+# # CYAN='\e[1;36m'
+# BLUE='\e[1;34m'
+# ORANGE='\e[1;93m'
+# RED='\e[1;31m'
+# WHITE='\e[1;37m'
 GREEN='\e[1;32m'
-YELLOW='\e[1;33m'
-BLUE='\e[1;34m'
-CYAN='\e[1;36m'
-WHITE='\e[1;37m'
-ORANGE='\e[1;93m'
 NC='\e[0m'
 YELLOW='\e[1;33m'
-NC='\e[0m'
 
 # Template
 # display_message "[${GREEN}✔${NC}]

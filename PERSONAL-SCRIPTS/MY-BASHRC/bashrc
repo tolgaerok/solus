@@ -10,7 +10,6 @@ alias tolga-systcl="sudo /home/tolga/scripts/systcl.sh"
 
 alias gitup="$HOME/gitup.sh"
 
-
 ###---------- my tools ----------###
 alias tolga-htos="sudo ~/.config/MY-TOOLS/assets/scripts/Zysnc-Options/ZYSNC-HOME-TO-SERVER.sh"
 alias tolga-mount="sudo ~/.config/MY-TOOLS/assets/scripts/Mounting-Options/MOUNT-ALL.sh"
@@ -150,8 +149,8 @@ cleanup_solus() {
 
     display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
     #gum spin --spinner dot --title "Stand-by..." -- sleep 2
-    echo -e "\e[1;32m[✔]\e[0m Checking system updates .....\n" && \
-    sudo eopkg upgrade -y
+    echo -e "\e[1;32m[✔]\e[0m Checking system updates .....\n" &&
+        sudo eopkg upgrade -y
 
 }
 
@@ -180,17 +179,22 @@ echo -e "\e[1;32m[✔]\e[0m All updates and cleanups are complete."'
 # recache all Flatpak and system fonts
 recache_fonts() {
     echo -e "\e[1;32m[✔]\e[0m Recaching Flatpak fonts..."
-    flatpak repair --system || { echo -e "\e[1;31m[✘]\e[0m Failed to recache Flatpak fonts."; exit 1; }
+    flatpak repair --system || {
+        echo -e "\e[1;31m[✘]\e[0m Failed to recache Flatpak fonts."
+        exit 1
+    }
 
     echo -e "\e[1;32m[✔]\e[0m Recaching system fonts..."
     sudo mkdir -p /usr/local/share/fonts
     sudo chmod -R 755 /usr/local/share/fonts
     sudo rm -rf /var/cache/fontconfig/*
-    sudo fc-cache -rv || { echo -e "\e[1;31m[✘]\e[0m Failed to recache system fonts."; exit 1; }
+    sudo fc-cache -rv || {
+        echo -e "\e[1;31m[✘]\e[0m Failed to recache system fonts."
+        exit 1
+    }
 
     echo -e "\e[1;32m[✔]\e[0m Font cache update complete."
 }
-
 
 alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system && sudo sysctl -p && sudo mount -a && sudo systemctl daemon-reload"
 
@@ -223,14 +227,14 @@ export __GL_SHADER_CACHE=1
 export __GL_THREADED_OPTIMIZATION=1
 
 btrfs_balance_and_monitor() {
-  echo "Starting Btrfs balance for /home..."
-  sudo btrfs balance start -m -d /home
-  echo "Balance started. Monitoring status every 10 seconds..."
-  while true; do
-    echo "Checking balance status..."
-    sudo btrfs balance status /home
-    sleep 10
-  done
+    echo "Starting Btrfs balance for /home..."
+    sudo btrfs balance start -m -d /home
+    echo "Balance started. Monitoring status every 10 seconds..."
+    while true; do
+        echo "Checking balance status..."
+        sudo btrfs balance status /home
+        sleep 10
+    done
 }
 
 # Alias to run the function
@@ -255,29 +259,29 @@ btrfs_manage() {
     read -p "Enter your choice [1-5]: " choice
 
     case $choice in
-        1)
-            echo "Starting balance on /home..."
-            sudo btrfs balance start /home && sudo btrfs balance status /home
-            ;;
-        2)
-            echo "Starting balance on /..."
-            sudo btrfs balance start / && sudo btrfs balance status /
-            ;;
-        3)
-            echo "Starting scrub on /home..."
-            sudo btrfs scrub start /home && sudo btrfs scrub status /home
-            ;;
-        4)
-            echo "Starting scrub on /..."
-            sudo btrfs scrub start / && sudo btrfs scrub status /
-            ;;
-        5)
-            echo "Exiting."
-            return 0
-            ;;
-        *)
-            echo "Invalid option. Please choose a number between 1 and 5."
-            ;;
+    1)
+        echo "Starting balance on /home..."
+        sudo btrfs balance start /home && sudo btrfs balance status /home
+        ;;
+    2)
+        echo "Starting balance on /..."
+        sudo btrfs balance start / && sudo btrfs balance status /
+        ;;
+    3)
+        echo "Starting scrub on /home..."
+        sudo btrfs scrub start /home && sudo btrfs scrub status /home
+        ;;
+    4)
+        echo "Starting scrub on /..."
+        sudo btrfs scrub start / && sudo btrfs scrub status /
+        ;;
+    5)
+        echo "Exiting."
+        return 0
+        ;;
+    *)
+        echo "Invalid option. Please choose a number between 1 and 5."
+        ;;
     esac
 }
 

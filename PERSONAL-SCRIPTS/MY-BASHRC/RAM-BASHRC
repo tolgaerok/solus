@@ -23,14 +23,19 @@ RAM_BASHRC="/tmp/tolga_github_bashrc/bashrc" # Location in RAM, make sure you ha
 mkdir -p /tmp/tolga_github_bashrc
 
 # Download bashrc from my GitHub if it doesn't exist in RAM
-if [ ! -f $RAM_BASHRC ]; then
+# if [ ! -f $RAM_BASHRC ]; then
     echo "Downloading bashrc from GitHub..."
     curl -sL $GITHUB_BASHRC_URL -o $RAM_BASHRC
-fi
+# fi
 
 # Source the bashrc from RAM
-if [ -f $RAM_BASHRC ]; then
-    source $RAM_BASHRC
+if [ -f "$RAM_BASHRC" ]; then
+    echo "Sourcing bashrc..."
+    source "$RAM_BASHRC" || { echo "Failed to source bashrc"; exit 1; }
+    echo "Bashrc sourced successfully."
+else
+    echo "Bashrc file not found in RAM!"
+    exit 1
 fi
 
 # if you want to check it in RAM

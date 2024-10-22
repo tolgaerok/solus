@@ -1,4 +1,3 @@
-```bash
 source /usr/share/defaults/etc/profile
 export PATH="$PATH:$HOME/local/bin"
 xhost +si:localuser:$USER
@@ -365,5 +364,3 @@ alias grub-mod="sudo nano /etc/kernel/cmdline.d/mitigations.conf"
 . "$HOME/.atuin/bin/env"
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
-
-```

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tolga Erok
 
-# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/MY-BASHRC/auto-setup-ram-bashrc.sh | sudo bash
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/MY-BASHRC/auto-setup-ram-bashrc.sh | bash
 
 # insert into .bashrc
 BASHRC_CONTENT=$(cat << 'EOF'

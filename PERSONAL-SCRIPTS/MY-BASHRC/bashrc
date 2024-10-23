@@ -1,7 +1,7 @@
 source /usr/share/defaults/etc/profile
 export PATH="$PATH:$HOME/local/bin"
 xhost +si:localuser:$USER
-###---------- ALIASES ----------##
+###---------- ALIASES ----------###
 
 alias tolga-alert='notify-send --urgency=low "$(history|tail -n1|sed -e "s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//")"'
 alias tolga-tolga='sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"'

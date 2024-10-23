@@ -295,7 +295,7 @@ PS1="\[\e[1;m\]┌(\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]) \[\e[1;m\]➤\[\e[1;
 # . /home/tolga/.nix-profile/etc/profile.d/nix.sh
 
 ###---------- Vscoding ----------###
-# eval "$(direnv hook bash)"
+eval "$(direnv hook bash)"
 
 ###---------- Solus related ----------###
 alias tolga-solus='sudo mount -a && sudo systemctl daemon-reload && sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system'
@@ -368,3 +368,7 @@ alias grub-mod="sudo nano /etc/kernel/cmdline.d/mitigations.conf"
 . "$HOME/.atuin/bin/env"
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

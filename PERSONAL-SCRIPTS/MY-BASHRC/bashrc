@@ -386,8 +386,6 @@ else
     echo "" && sleep .1
 fi
 
-cl && echo "" && fortune | lolcat && echo ""
-
 . "$HOME/.atuin/bin/env"
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
@@ -395,3 +393,5 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+cl && echo "" && fortune | lolcat && echo ""

@@ -2,6 +2,8 @@
 # Tolga Erok
 # Version 2
 
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/MY-BASHRC/auto-setup-ram-bashrc.sh | bash
+
 GITHUB_BASHRC_URL="https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/MY-BASHRC/bashrc"
 LOCAL_BASHRC="$HOME/.bashrc"
 TMP_BASHRC="/tmp/tolga_github_bashrc/bashrc"

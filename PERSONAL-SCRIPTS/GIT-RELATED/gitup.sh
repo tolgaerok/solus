@@ -84,7 +84,7 @@ if git status --porcelain | grep -qE '^\s*[MARCDU]'; then
     echo "Pulling changes from remote repository..."
     git pull --rebase origin main
 
-    # Push changes to the main branch
+    # Push changes to the main branch..
     echo "Pushing changes to remote repository..."
     git push origin main
     echo " files && figlet uploaded"

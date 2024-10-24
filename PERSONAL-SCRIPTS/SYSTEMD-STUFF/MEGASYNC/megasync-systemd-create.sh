@@ -15,8 +15,6 @@ After=graphical.target
 [Service]
 ExecStart=/bin/bash -c 'if [ "\$XDG_SESSION_TYPE" = "wayland" ]; then export XDG_RUNTIME_DIR="/run/user/\$(id -u)"; export WAYLAND_DISPLAY="wayland-0"; else export DISPLAY=":0"; fi; distrobox-enter --name f40 -- megasync'
 Restart=on-failure
-StandardOutput=journal
-StandardError=journal
 
 [Install]
 WantedBy=default.target

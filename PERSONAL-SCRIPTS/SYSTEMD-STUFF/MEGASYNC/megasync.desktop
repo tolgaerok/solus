@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/tolga/start_megasync.sh
+Hidden=false
+NoDisplay=false
+X-KDE-Autostart-enabled=true
+Name=MEGAsync

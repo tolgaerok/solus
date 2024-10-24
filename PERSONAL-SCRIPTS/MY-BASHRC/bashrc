@@ -16,7 +16,6 @@ echo -e "\e[1;32m[✔]\e[0m Network is metered. Rotating and vacuuming journal l
 (sudo journalctl --rotate; sudo journalctl --vacuum-time=1s && sleep 1) && \
 sleep 1 && \
 cleanup_solus && \
-
 display_message "[\e[1;32m✔\e[0m]  Checking flatpaks" && \
 echo -e "\e[1;32m[✔]\e[0m Checking updates for installed flatpak programs...\n" && \
 sudo flatpak update --appstream && flatpak update && \

@@ -59,4 +59,4 @@ sudo tc -s qdisc show dev "$interface"
 # Check the status of the systemd service
 sudo systemctl status apply-cake-qdisc.service
 
-echo "alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'" >>~/.bashrc
+echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 \\\!~ \"NO-CARRIER\" {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; getline}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service'" >> ~/.bashrc

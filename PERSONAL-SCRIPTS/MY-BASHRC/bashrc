@@ -34,11 +34,10 @@ recache_fonts && \
 echo -e "\e[1;32m[✔]\e[0m All updates and cleanups are complete."'
 
 alias boot="sudo clr-boot-manager mount-boot && cd /boot/loader && sudo nano loader.conf"
-alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}'\''); sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'
+alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'
 alias cake="sudo tc -s qdisc show dev wlp3s0 && sudo systemctl status apply-cake-qdisc.service"
 alias fastfetch='BLUEFIN_FETCH_LOGO=$(find $HOME/.config/fastfetch/logo/* | /usr/bin/shuf -n 1) && rm -rf $HOME/.cache/fastfetch && /usr/bin/fastfetch --logo $BLUEFIN_FETCH_LOGO -c $HOME/.config/fastfetch/config.jsonc'
 alias grub-mod="sudo nano /etc/kernel/cmdline.d/mitigations.conf"
-
 alias fastbackup="rsync -aAXv --delete --info=progress2 --no-xattrs \
 --include='.config/***' \
 --include='.ssh/***' \

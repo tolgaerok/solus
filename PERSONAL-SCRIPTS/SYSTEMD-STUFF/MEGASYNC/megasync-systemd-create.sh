@@ -21,6 +21,7 @@ WantedBy=default.target
 EOF
 
 # Enable the service's
-systemctl --user enable "$SERVICE_NAME"
-systemctl --user start "$SERVICE_NAME"
-systemctl --user status "$SERVICE_NAME"
+systemctl --user daemon-reload
+systemctl --user enable megasync.service
+systemctl --user start megasync.service
+systemctl --user status megasync.service

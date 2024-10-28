@@ -3,7 +3,7 @@
 # systemd to force CAKE onto any active network interface.
 # 19 Oct 2024
 
-# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/make-cake-systemD-V2.sh | sudo bash
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/SYSTEMD-STUFF/CAKE/make-cake-systemD-V2.sh | sudo bash
 
 YELLOW="\033[1;33m"
 BLUE="\033[0;34m"

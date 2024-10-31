@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tolga Erok
 # 21 Jun 2024
-# Personal Solus setup script for Samba...
+# Personal Solus setup script for Samba
 
 # curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/SAMBA/setup-samba.sh | sudo bash
 clear

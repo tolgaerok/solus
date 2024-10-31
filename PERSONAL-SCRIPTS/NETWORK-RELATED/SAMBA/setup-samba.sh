@@ -1,27 +1,14 @@
 #!/bin/bash
 # Tolga Erok
 # 21 Jun 2024
-# Personal Solus setup script...
+# Personal Solus setup script for Samba...
 
-# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/setup-samba.sh | sudo bash
-
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/SAMBA/setup-samba.sh | sudo bash
 clear
 
-# Assign a color variable based on the RANDOM number
-# ___________________________________________________
-
-# CYAN='\e[1;36m'
-# BLUE='\e[1;34m'
-# ORANGE='\e[1;93m'
-# RED='\e[1;31m'
-# WHITE='\e[1;37m'
 GREEN='\e[1;32m'
 NC='\e[0m'
 YELLOW='\e[1;33m'
-
-# Template
-# display_message "[${GREEN}✔${NC}]
-# display_message "[${RED}✘${NC}]
 
 # Function to display messages
 display_message() {
@@ -31,7 +18,6 @@ display_message() {
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
-
 }
 
 apply_samba() {
@@ -39,13 +25,18 @@ apply_samba() {
     echo -e "\\033[34;1mCreate SMB user and SMB group\\033[0m"
     echo -e "\\033[34;1mBy \\033[33mTolga Erok\\033[0m"
 
-    # Function to read user input and prompt for input
+    # Function to read user input and ensure it's not empty
     prompt_input() {
-        read -p "$1" value
-        echo "$value"
+        while true; do
+            read -p "$1" value
+            if [[ -n "$value" ]]; then
+                echo "$value"
+                break
+            else
+                echo -e "${RED}Input cannot be empty. Please try again.${NC}"
+            fi
+        done
     }
-
-    # Create user/group
 
     # Prompt for the desired username and group for Samba
     sambausername=$(prompt_input $'\nEnter the USERNAME to add to Samba: ')
@@ -81,7 +72,6 @@ apply_samba() {
     sudo systemctl enable --now nmb
     sudo systemctl restart smb
     sudo systemctl restart nmb
-
 }
 
 # execute

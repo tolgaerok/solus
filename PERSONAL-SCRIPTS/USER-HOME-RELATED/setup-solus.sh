@@ -32,52 +32,15 @@ display_message() {
 
 }
 
-# Ask for the username
-display_message "[${GREEN}✔${NC}] User-name required"
-echo ""
-read -p "Nix package manager wants a username to install the nix package manager to.
-Enter Name: " username
+display_message "Extra fonts for VSCODE terminal..."
+mkdir -p ~/.local/share/fonts
+ln -s ~/.local/share/fonts/ ~/.fonts
+cd ~/.fonts 
+curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz
+tar -xvf Hack.tar.xz
 
-# setup nix pkgs on solus
-cd /home/$username
+# 'Cascadia Code', 'Droid Sans Mono', 'monospace','Hack Nerd Font',monospace
 
-display_message "[${GREEN}✔${NC}] Downloading nix pgk manager"
-
-sh <(curl -L https://nixos.org/nix/install) --no-daemon
-. /home/$username/.nix-profile/etc/profile.d/nix.sh
-
-display_message "[${GREEN}✔${NC}] Setting up profile PATHS"
-
-# Add the following lines to append export statements to .bashrc
-echo "export PATH=\"/home/$username/.nix-profile/bin:\$PATH\"" >>/home/$username/.bashrc
-echo ". /home/$username/.nix-profile/etc/profile.d/nix.sh" >>/home/$username/.bashrc
-
-# Try to detect system locale and set locale variables into bashrc
-system_locale=$(locale | grep "LANG" | cut -d '=' -f 2)
-# echo "export LC_ALL=$system_locale" >> /home/$username/.bashrc
-# echo "export LANG=$system_locale" >> /home/$username/.bashrc
-
-sleep 1
-
-display_message "[${GREEN}✔${NC}] Setting up default.nix in $HOME"
-
-# Create a default.nix file in the home directory
-echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.gum pkgs.direnv pkgs.duf pkgs.fortune pkgs.lolcat ]; }' >/home/$username/default.nix
-
-# Source the modified .bashrc to apply changes without restarting the shell
-source /home/$username/.bashrc
-
-nix-env -iA nixpkgs.direnv
-nix-env -iA nixpkgs.lolcat
-nix-env -iA nixpkgs.fortune
-nix-env -iA nixpkgs.duf
-
-sleep 1
-
-display_message "[${GREEN}✔${NC}] Finished"
-
-echo ""
-echo "Nix package manager setup and Done"
 sleep 3
 
 # Function to append content to a file if it doesn't exist

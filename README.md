@@ -1,4 +1,4 @@
-# solus
+# solus ..........................
 Personal Solus repo
 #
 Setup git - very painful

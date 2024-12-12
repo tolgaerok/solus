@@ -21,13 +21,6 @@ sudo eopkg it podman
 
 flatpak install flathub com.wps.Office
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-atuin register -u tolga -e kingtolga@gmail.com
-atuin key
-atuin sync -f
-atuin login -u tolga -p ibm450
-atuin sync -f
-atuin import auto
-atuin import bash
 
 # Set permissions for newuidmap and newgidmap
 echo "Setting setuid for /usr/bin/newuidmap and /usr/bin/newgidmap..."
@@ -136,6 +129,9 @@ atuin sync -f
 atuin import auto
 atuin import bash
 
+brew install lolcat fortune
+sudo eopkg install gimp vscode
+
 echo "Setup complete! You can now create a distrobox container."
 
 #######################################
@@ -146,4 +142,4 @@ echo "Setup complete! You can now create a distrobox container."
 # sudo ln -s /etc/profile /usr/share/defaults/etc/profile
 
 # alias cake1="interface=\$(ip link show | awk -F: '\$0 ~ /^[2-9]:|^[1-9][0-9]:/ && \$0 ~ /UP/ && \$0 !~ /LOOPBACK/ {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); sudo systemctl daemon-reload; sudo systemctl restart apply-cake-qdisc.service; sudo tc -s qdisc show dev \$interface; nmcli device status && echo "" && sudo systemctl status apply-cake-qdisc.service"
-# 
+#

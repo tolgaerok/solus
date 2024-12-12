@@ -87,7 +87,7 @@ if git status --porcelain | grep -qE '^\s*[MARCDU]'; then
     # Push changes to the main branch
     echo "Pushing changes to remote repository..."
     git push origin main
-    figlet Files Uploaded
+    figlet Files Uploaded | lolcat
 else
     echo "No changes to commit."
     figlet Nothing Uploaded

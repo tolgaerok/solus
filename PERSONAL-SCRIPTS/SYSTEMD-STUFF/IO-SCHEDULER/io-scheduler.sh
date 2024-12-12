@@ -9,7 +9,7 @@ Description=Set I/O Scheduler on boot
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c 'echo kyber | sudo tee /sys/block/sda/queue/scheduler; printf \"I/O Scheduler set to: \"; cat /sys/block/sda/queue/scheduler'
+ExecStart=/bin/bash -c 'echo none | sudo tee /sys/block/sda/queue/scheduler; printf \"I/O Scheduler set to: \"; cat /sys/block/sda/queue/scheduler'
 
 [Install]
 WantedBy=default.target" | sudo tee /etc/systemd/system/io-scheduler.service

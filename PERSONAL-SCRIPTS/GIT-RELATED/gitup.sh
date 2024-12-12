@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tolga Erok
 # 10/6/2024
-# git uploader version #2
+# git uploader version #
 
 set -e
 
@@ -90,7 +90,7 @@ if git status --porcelain | grep -qE '^\s*[MARCDU]'; then
     figlet Files Uploaded | lolcat
 else
     echo "No changes to commit."
-    figlet Nothing Uploaded
+    figlet Nothing Uploaded | lolcat
 fi
 
 end_time=$(date +%s)

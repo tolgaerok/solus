@@ -4,7 +4,6 @@ cd /home/tolga/Documents/MyGit/
 
 # Clone my repository
 git clone https://github.com/tolgaerok/solus.git
-cd solus/
 
 # Set global Git configuration
 git config --global user.email "kingtolga@gmail.com"
@@ -20,7 +19,7 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 
 # Display the SSH public key (add it to GitHub account via GitHub settings)
-cat ~/.ssh/id_rsa.pub 
+cat ~/.ssh/id_rsa.pub
 
 # Configure the local repository
 git branch -m main
@@ -47,4 +46,3 @@ git remote -v
 
 # Test the updated SSH connection again
 ssh -T git@github.com
-

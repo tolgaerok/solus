@@ -132,6 +132,11 @@ atuin import bash
 brew install lolcat fortune
 sudo eopkg install gimp vscode
 
+sudo systemctl enable --now smb
+sudo systemctl enable --now nmb
+sudo systemctl restart smb
+sudo systemctl restart nmb
+
 echo "Setup complete! You can now create a distrobox container."
 
 #######################################

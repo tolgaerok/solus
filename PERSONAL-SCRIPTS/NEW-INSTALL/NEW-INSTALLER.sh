@@ -121,6 +121,8 @@ brew install direnv
 
 distrobox-create --image fedora:40 --name f40
 
+sudo bash -c "<(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)"
+
 atuin register -u tolga -e kingtolga@gmail.com
 atuin key
 atuin sync -f

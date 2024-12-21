@@ -2,9 +2,9 @@
 
 ### META_DATA ###
 # Author: Tolga Erok
-# Date: 12/1/2024
-# VERSION: 3
-# Description: Image converter using ImageMagick
+# Date: 12/21/2024
+# VERSION: 8
+# Description: Image converter using ImageMagick with debugging
 
 ### Constants and Variables ###
 OUTPUT_FOLDER="CONVERTED"
@@ -13,19 +13,16 @@ SUPPORTED_FORMATS=("png" "jpg" "jpeg" "gif" "bmp" "tiff" "avif" "heic")
 ### Functions ###
 
 check_imagick() {
-    if ! command -v convert &>/dev/null; then
+    if ! command -v magick &>/dev/null; then
         read -p "ImageMagick is not installed. Install it? (y/n): " -n 1 -r
         echo
         if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-            # Detect package manager and install ImageMagick accordingly
             if command -v dnf &>/dev/null; then
                 sudo dnf install -y ImageMagick
             elif command -v eopkg &>/dev/null; then
                 sudo eopkg install -y imagemagick
             else
                 echo "Unsupported package manager. Please install ImageMagick manually."
-                echo "  - On Fedora: sudo dnf install ImageMagick"
-                echo "  - On Solus: sudo eopkg install imagemagick"
                 exit 1
             fi
         else
@@ -33,6 +30,14 @@ check_imagick() {
             exit 1
         fi
     fi
+}
+
+prepare_output_folder() {
+    mkdir -p "$OUTPUT_FOLDER"
+    chmod u+w "$OUTPUT_FOLDER" || {
+        echo "Failed to set permissions on the output folder. Exiting."
+        exit 1
+    }
 }
 
 convert_images() {
@@ -45,47 +50,60 @@ convert_images() {
         return 1
     fi
 
-    # Create output folder if not exists
-    mkdir -p "$OUTPUT_FOLDER"
-
-    # Get image files in the current directory (PWD)
-    for file in *.{${SUPPORTED_FORMATS[@]}}; do
-        image_files+=("$file")
+    # Get image files in the current directory, including special characters
+    shopt -s nullglob
+    for file in *.heic *.jpg *.jpeg *.png *.gif *.bmp *.tiff *.avif; do
+        [[ -e "$file" ]] && image_files+=("$file")
     done
+    shopt -u nullglob
 
-    # Check if there are any images to convert
+    # Debug: Show found files
+    echo -e "\033[1;34mFound ${#image_files[@]} image(s):\033[0m"
     if [ ${#image_files[@]} -eq 0 ]; then
         echo "No images found for conversion."
         return 1
     fi
+    printf "%s\n" "${image_files[@]}"
 
-    # Count and show their extensions
-    local unique_ext=($(printf "%s\n" "${image_files[@]##*.}" | sort -u))
-    echo "Found ${#image_files[@]} image(s) with extension(s): ${unique_ext[*]}"
+    # Convert images sequentially to debug the conversion process
+    echo -e "\033[1;34mConverting images one by one...\033[0m"
+    for file in "${image_files[@]}"; do
+        echo -e "\033[1;34mConverting: $file\033[0m"
+        output_path="$OUTPUT_FOLDER/$(basename "$file" | sed 's/\.[^.]*$//')-converted.$output_format"
+        echo "Output path: $output_path"
 
-    # Convert images in parallel using xargs for potential speedup
-    printf "%s\n" "${image_files[@]}" | xargs -P "$(nproc)" -I {} bash -c \
-        "convert {} \"$OUTPUT_FOLDER/{}-converted.$output_format\" 2>/dev/null && echo \"Converted: {} to $output_format\""
+        # Debug ImageMagick conversion
+        if magick "$file" "$output_path"; then
+            echo -e "\033[1;32m✔ Successfully converted: $file\033[0m"
+        else
+            echo -e "\033[1;31m✘ Failed to convert: $file\033[0m"
+        fi
+    done
+
+    echo -e "\033[1;34mAll conversions are complete.\033[0m"
 }
+
 
 ### Main Script ###
 
 check_imagick
+prepare_output_folder
 
 # Prompt user for chosen output format with select menu
 while true; do
-    echo "Select the desired output format:"
+    echo -e "\033[1;34mSelect the desired output format:\033[0m"
     select output_format in "${SUPPORTED_FORMATS[@]}"; do
         [ -n "$output_format" ] && break
         echo "Invalid selection. Please try again."
     done
-    echo "Selected output format: $output_format"
+    echo -e "\033[1;34mSelected output format: $output_format\033[0m"
     break
 done
 
-# Start to convert images
+# Start conversion process
 if ! convert_images "$output_format"; then
     echo "Conversion failed. Please check the logs for more information."
 else
     echo "Conversion complete."
+    echo "Converted files are located in the '$OUTPUT_FOLDER' directory."
 fi

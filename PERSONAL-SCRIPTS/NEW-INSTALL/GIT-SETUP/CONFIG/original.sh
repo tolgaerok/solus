@@ -1,3 +1,8 @@
+#!/bin/bash
+# Tolga Erok
+# 19/12/2024
+# **Setup Git Repository and GitHub SSH Authentication**
+
 # Create a directory for my Git repository
 mkdir -p /home/tolga/Documents/MyGit
 cd /home/tolga/Documents/MyGit/

@@ -139,6 +139,14 @@ sudo systemctl enable --now nmb
 sudo systemctl restart smb
 sudo systemctl restart nmb
 
+sudo systemctl enable nmb smb
+sudo systemctl restart nmb smb
+sudo systemctl restart smb.service nmb.service
+sudo systemctl enable wsdd.service
+sudo systemctl restart wsdd.service
+sudo systemctl daemon-reload
+sudo systemctl status wsdd.service
+
 echo "Setup complete! You can now create a distrobox container."
 
 #######################################

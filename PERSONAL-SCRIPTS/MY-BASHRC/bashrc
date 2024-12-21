@@ -29,14 +29,13 @@ sudo rm -rfv /var/tmp/flatpak-cache-* && \
 flatpak --user uninstall --unused -y --noninteractive && \
 /usr/bin/flatpak --user update -y --noninteractive && \
 /usr/bin/flatpak --user repair && \
-recache_fonts && \
 echo -e "\e[1;32m[✔]\e[0m All updates and cleanups are complete."'
 
 alias boot="sudo clr-boot-manager mount-boot && cd /boot/loader && sudo nano loader.conf"
 alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'
 alias cake="sudo tc -s qdisc show dev wlp3s0 && sudo systemctl status apply-cake-qdisc.service"
 alias fastfetch='BLUEFIN_FETCH_LOGO=$(find $HOME/.config/fastfetch/logo/* | /usr/bin/shuf -n 1) && rm -rf $HOME/.cache/fastfetch && /usr/bin/fastfetch --logo $BLUEFIN_FETCH_LOGO -c $HOME/.config/fastfetch/config.jsonc'
-alias grub-mod="sudo nano /etc/kernel/cmdline.d/mitigations.conf"
+alias grub-mod="kate /etc/kernel/cmdline.d/custom-kernel-parm.conf"
 alias fastbackup="rsync -aAXv --delete --info=progress2 --no-xattrs \
 --include='.config/***' \
 --include='.ssh/***' \
@@ -239,26 +238,6 @@ cleanup_solus() {
 
 }
 
-# recache all Flatpak and system fonts
-recache_fonts() {
-    echo -e "\e[1;32m[✔]\e[0m Recaching Flatpak fonts..."
-    flatpak repair --system || {
-        echo -e "\e[1;31m[✘]\e[0m Failed to recache Flatpak fonts."
-        exit 1
-    }
-
-    echo -e "\e[1;32m[✔]\e[0m Recaching system fonts..."
-    sudo mkdir -p /usr/local/share/fonts
-    sudo chmod -R 755 /usr/local/share/fonts
-    sudo rm -rf /var/cache/fontconfig/*
-    sudo fc-cache -rv || {
-        echo -e "\e[1;31m[✘]\e[0m Failed to recache system fonts."
-        exit 1
-    }
-
-    echo -e "\e[1;32m[✔]\e[0m Font cache update complete."
-}
-
 ###---------- Nvidia session ----------###
 export LIBVA_DRIVER_NAME=nvidia
 export WLR_NO_HARDWARE_CURSORS=1
@@ -387,9 +366,9 @@ fi
 . "$HOME/.atuin/bin/env"
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+setopt interactivecomments
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 cl && echo "" && fortune | lolcat && echo ""

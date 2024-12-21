@@ -4,7 +4,7 @@
 # Personal Solus kernel parameter add-ins
 
 # My personal kernel parameter string
-KERNEL_PARAMS="io_delay=none rootdelay=0 iomem=relaxed intel_iommu=on iommu=pt vfio_pci.disable_vga=1 rd.driver.pre=vfio_pci"
+KERNEL_PARAMS="io_delay=none rootdelay=0 iomem=relaxed intel_iommu=on iommu=pt"
 
 # Personal conf file to be created
 KERNEL_PARAMS_FILE="/etc/kernel/cmdline.d/custom-kernel-parm.conf"

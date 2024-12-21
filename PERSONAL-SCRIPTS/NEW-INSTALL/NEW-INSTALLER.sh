@@ -134,10 +134,14 @@ atuin import bash
 brew install lolcat fortune
 sudo eopkg install gimp vscode
 
+sudo systemctl enable smb nmb wsdd.service
 sudo systemctl enable --now smb nmb wsdd.service
-sudo systemctl restart smb nmb wsdd.service
 sudo systemctl daemon-reload
+sudo systemctl restart smb nmb wsdd.service
 sudo systemctl status smb nmb wsdd.service
+systemctl is-enabled smb
+systemctl is-enabled nmb
+systemctl is-enabled wsdd
 
 echo "Setup complete! You can now create a distrobox container."
 

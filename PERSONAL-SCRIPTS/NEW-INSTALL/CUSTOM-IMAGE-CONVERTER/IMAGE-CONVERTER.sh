@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# Tolga Erok .............
-# 12/1/2024
-# Image converter using ImageMagick
+### META_DATA ###
+# Author: Tolga Erok
+# Date: 12/1/2024
+# VERSION: 3
+# Description: Image converter using ImageMagick
 
 ### Constants and Variables ###
 OUTPUT_FOLDER="CONVERTED"
-SUPPORTED_FORMATS="png jpg jpeg gif bmp tiff avif heic"
+SUPPORTED_FORMATS=("png" "jpg" "jpeg" "gif" "bmp" "tiff" "avif" "heic")
 
 ### Functions ###
 
@@ -15,7 +17,17 @@ check_imagick() {
         read -p "ImageMagick is not installed. Install it? (y/n): " -n 1 -r
         echo
         if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-            sudo dnf install ImageMagick
+            # Detect package manager and install ImageMagick accordingly
+            if command -v dnf &>/dev/null; then
+                sudo dnf install -y ImageMagick
+            elif command -v eopkg &>/dev/null; then
+                sudo eopkg install -y imagemagick
+            else
+                echo "Unsupported package manager. Please install ImageMagick manually."
+                echo "  - On Fedora: sudo dnf install ImageMagick"
+                echo "  - On Solus: sudo eopkg install imagemagick"
+                exit 1
+            fi
         else
             echo "Please install ImageMagick and run the script again."
             exit 1
@@ -28,23 +40,23 @@ convert_images() {
     local image_files=()
 
     # Validate output format
-    if [[ "$SUPPORTED_FORMATS" != *"$output_format"* ]]; then
-        echo "Unsupported format: $output_format. Supported formats: $SUPPORTED_FORMATS"
-        exit 1
+    if [[ ! " ${SUPPORTED_FORMATS[@]} " =~ " $output_format " ]]; then
+        echo "Error: Unsupported format '$output_format'. Supported formats: ${SUPPORTED_FORMATS[*]}"
+        return 1
     fi
 
     # Create output folder if not exists
     mkdir -p "$OUTPUT_FOLDER"
 
     # Get image files in the current directory (PWD)
-    for ext in $SUPPORTED_FORMATS; do
-        image_files+=(*."$ext")
+    for file in *.{${SUPPORTED_FORMATS[@]}}; do
+        image_files+=("$file")
     done
 
     # Check if there are any images to convert
     if [ ${#image_files[@]} -eq 0 ]; then
         echo "No images found for conversion."
-        exit 1
+        return 1
     fi
 
     # Count and show their extensions
@@ -60,16 +72,20 @@ convert_images() {
 
 check_imagick
 
-# Prompt user for chosen output format
+# Prompt user for chosen output format with select menu
 while true; do
-    read -p "Enter the desired output format ($SUPPORTED_FORMATS): " output_format
-    if [[ "$SUPPORTED_FORMATS" == *"$output_format"* ]]; then
-        break
-    fi
-    echo "Invalid format. Please choose from: $SUPPORTED_FORMATS"
+    echo "Select the desired output format:"
+    select output_format in "${SUPPORTED_FORMATS[@]}"; do
+        [ -n "$output_format" ] && break
+        echo "Invalid selection. Please try again."
+    done
+    echo "Selected output format: $output_format"
+    break
 done
 
 # Start to convert images
-convert_images "$output_format"
-
-echo "Conversion complete."
+if ! convert_images "$output_format"; then
+    echo "Conversion failed. Please check the logs for more information."
+else
+    echo "Conversion complete."
+fi

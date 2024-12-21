@@ -143,6 +143,68 @@ systemctl is-enabled smb
 systemctl is-enabled nmb
 systemctl is-enabled wsdd
 
+# install firewalld if not present
+install_firewalld_if_needed() {
+    echo "Checking if firewalld is installed..."
+    if ! command -v firewall-cmd &>/dev/null; then
+        echo "firewalld is not installed. Installing..."
+        sudo eopkg install firewalld
+    else
+        echo "firewalld is already installed."
+    fi
+}
+
+# enable and start services
+enable_and_start_services() {
+    echo "Enabling and starting Samba, NMB, and WSDD services..."
+    sudo systemctl enable --now smb nmb wsdd.service
+    sudo systemctl restart smb nmb wsdd.service
+    sudo systemctl daemon-reload
+}
+
+# check and start firewalld
+ensure_firewalld_running() {
+    echo "Checking if firewalld is active..."
+    if ! systemctl is-active --quiet firewalld; then
+        echo "Starting firewalld..."
+        sudo systemctl start firewalld
+        sudo systemctl enable firewalld
+    else
+        echo "Firewalld is already running."
+    fi
+}
+
+# allow Samba through firewalld
+allow_samba_through_firewall() {
+    echo "Allowing Samba through the firewall..."
+    sudo firewall-cmd --zone=public --add-service=samba --permanent
+    sudo firewall-cmd --reload
+}
+
+# Main function
+fw() {
+    # Install firewalld if it's not installed
+    install_firewalld_if_needed
+
+    # Ensure firewalld is running
+    ensure_firewalld_running
+
+    # Enable and start necessary services
+    enable_and_start_services
+
+    # Allow Samba through the firewall
+    allow_samba_through_firewall
+
+    # Check and show status of the services
+    sudo systemctl status smb nmb wsdd.service
+
+    # Verify firewall rules
+    sudo firewall-cmd --list-all
+}
+
+# Run the main function
+fw
+
 echo "Setup complete! You can now create a distrobox container."
 
 #######################################

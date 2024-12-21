@@ -50,7 +50,7 @@ convert_images() {
         return 1
     fi
 
-    # Get image files in the current directory, including special characters
+    # Get image files in the current directory
     shopt -s nullglob
     for file in *.heic *.jpg *.jpeg *.png *.gif *.bmp *.tiff *.avif; do
         [[ -e "$file" ]] && image_files+=("$file")
@@ -65,7 +65,7 @@ convert_images() {
     fi
     printf "%s\n" "${image_files[@]}"
 
-    # Convert images sequentially to debug the conversion process
+    # Convert images sequentially
     echo -e "\033[1;34mConverting images one by one...\033[0m"
     for file in "${image_files[@]}"; do
         echo -e "\033[1;34mConverting: $file\033[0m"
@@ -88,7 +88,7 @@ convert_images() {
 check_imagick
 prepare_output_folder
 
-# Prompt user for chosen output format with select menu
+# Prompt user for chosen output format
 while true; do
     echo -e "\033[1;34mSelect the desired output format:\033[0m"
     select output_format in "${SUPPORTED_FORMATS[@]}"; do
@@ -99,7 +99,7 @@ while true; do
     break
 done
 
-# Start conversion process
+# Start process
 if ! convert_images "$output_format"; then
     echo "Conversion failed. Please check the logs for more information."
 else

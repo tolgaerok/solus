@@ -83,7 +83,6 @@ convert_images() {
     echo -e "\033[1;34mAll conversions are complete.\033[0m"
 }
 
-
 ### Main Script ###
 
 check_imagick

@@ -6,7 +6,7 @@
 
 ### Constants and Variables ###
 OUTPUT_FOLDER="CONVERTED"
-SUPPORTED_FORMATS="png jpg jpeg gif bmp tiff avif"
+SUPPORTED_FORMATS="png jpg jpeg gif bmp tiff avif heic"
 
 ### Functions ###
 

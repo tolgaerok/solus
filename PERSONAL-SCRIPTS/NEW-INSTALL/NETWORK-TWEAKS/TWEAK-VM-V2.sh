@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Ensure the sysctl.d directory exists
+# check the sysctl.d directory exists
 SYSCTL_DIR="/etc/sysctl.d"
 if [ ! -d "$SYSCTL_DIR" ]; then
     echo "Creating sysctl.d directory..."
@@ -16,7 +16,7 @@ if [ ! -f "$SYSCTL_CONF" ]; then
     echo "$SYSCTL_CONF has been created."
 fi
 
-# Define sysctl parameters and their desired values
+# sysctl parameters and their desired values
 declare -A sysctl_params=(
     ["net.ipv4.conf.all.accept_redirects"]=0
     ["vm.swappiness"]=1

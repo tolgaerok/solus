@@ -67,6 +67,8 @@ for param in "${!sysctl_params[@]}"; do
 done
 
 # Reload sysctl configurations
+sudo udevadm control --reload-rules
+sudo udevadm trigger
 sudo sysctl --system
 
 echo "All sysctl parameters have been set and applied."

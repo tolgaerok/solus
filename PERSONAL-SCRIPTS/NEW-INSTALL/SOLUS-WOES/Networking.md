@@ -1,13 +1,17 @@
 
 # Solus Networking Woes
 
+
+Edit: `/etc/samba/smb.conf`
 ```bash
-Edit: /etc/samba/smb.conf and add: 
 [global]
 client min protocol = SMB2
 client max protocol = SMB3
+```
 
-EDIT: /etc/nsswitch.conf 
+Edit: `/etc/nsswitch.conf` 
+
+```bash
 hosts: mymachines mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] files myhostname dns
 ```
 
@@ -18,7 +22,7 @@ sudo eopkg install avahi
 # Enable and start Avahi
 sudo systemctl enable --now avahi-daemon
 
-# Restart Avahi and NetworkManager to apply changes
+# Restart Avahi and NetworkManager 
 sudo systemctl restart avahi-daemon
 sudo systemctl restart NetworkManager
 

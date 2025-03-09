@@ -1,7 +1,7 @@
 # solus ..........................
 Personal Solus repo
 #
-Setup git - very painful
+Setup git - very painful..
 
 ```bash
 # Generate an SSH key

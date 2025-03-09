@@ -9,7 +9,9 @@ client max protocol = SMB3
 
 EDIT: /etc/nsswitch.conf 
 hosts: mymachines mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] files myhostname dns
+```
 
+```bash
 # Install Avahi if not already installed
 sudo eopkg install avahi
 

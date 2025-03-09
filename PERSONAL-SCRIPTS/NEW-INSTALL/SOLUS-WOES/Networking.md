@@ -15,6 +15,8 @@ Edit: `/etc/nsswitch.conf`
 hosts: mymachines mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] files myhostname dns
 ```
 
+Do the following:
+
 ```bash
 # Install Avahi if not already installed
 sudo eopkg install avahi

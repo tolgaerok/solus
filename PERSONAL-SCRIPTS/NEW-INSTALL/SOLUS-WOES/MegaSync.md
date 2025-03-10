@@ -1,6 +1,7 @@
 # MegaSync Woes
 
 
+* Location: `/home/tolga/.config/autostart/`
 
 ```bash
 [Desktop Entry]
@@ -16,6 +17,8 @@ Terminal=false
 StartupNotify=false
 X-GNOME-Autostart-Delay=1
 ```
+
+* Location: `/home/tolga/`
 
 ```bash
 #!/bin/bash
@@ -43,7 +46,7 @@ distrobox-enter --name f40 -- bash -c "export DISPLAY=$DISPLAY; export QT_QPA_PL
 
 ```
 
-*Must Do the following:*
+* Must Do the following:
 ```bash
 touch ~/megasync.log
 chmod 644 ~/megasync.log

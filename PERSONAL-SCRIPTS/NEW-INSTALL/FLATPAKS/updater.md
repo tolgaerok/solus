@@ -1,6 +1,9 @@
-# Update ALIAS
+# Personal System and Flatpak Update ALIAS
 
 ![alt text](image.png)
+
+# 
+*Location: `./bash.rc`*
 
 ```bash
 alias tolga-update='

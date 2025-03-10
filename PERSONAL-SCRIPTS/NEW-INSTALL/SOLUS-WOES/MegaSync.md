@@ -1,10 +1,6 @@
 # MegaSync Woes
 
-### Do the following
-```bash
-touch ~/megasync.log
-chmod 644 ~/megasync.log
-```
+
 
 ```bash
 [Desktop Entry]
@@ -45,4 +41,12 @@ echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> "$LOGFILE"
 xhost +SI:localuser:tolga >> "$LOGFILE" 2>&1
 distrobox-enter --name f40 -- bash -c "export DISPLAY=$DISPLAY; export QT_QPA_PLATFORM=xcb; megasync" >> "$LOGFILE" 2>&1 &
 
+```
+
+*Must Do the following:*
+```bash
+touch ~/megasync.log
+chmod 644 ~/megasync.log
+chmod +x /home/tolga/start_megasync.sh
+chmod +x ~/.config/autostart/megasync.desktop
 ```

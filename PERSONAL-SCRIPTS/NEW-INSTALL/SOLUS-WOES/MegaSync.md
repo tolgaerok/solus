@@ -3,11 +3,16 @@
 ```bash
 [Desktop Entry]
 Type=Application
-Exec=/home/tolga/start_megasync.sh
-Hidden=false
-NoDisplay=false
-X-KDE-Autostart-enabled=true
-Name=Start MEGAsync in Distrobox
+Version=1.0
+Name=MEGAsync
+Comment=Sync with MEGA cloud
+# Exec=bash -c "sleep 5 && /home/tolga/start_megasync.sh"
+# Exec=env -i HOME=$HOME DISPLAY=:1 XAUTHORITY=$HOME/.Xauthority bash -c "/home/tolga/start_megasync.sh"
+Exec=bash -c "sleep 1 && xhost +SI:localuser:tolga && /home/tolga/start_megasync.sh"
+Icon=mega
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-Delay=5
 ```
 
 ```bash
@@ -15,9 +20,23 @@ Name=Start MEGAsync in Distrobox
 # Start MEGAsync inside Distrobox
 # Tolga Erok - 2024
 
-export DISPLAY=:0    # Change to :1 if necessary
-export XAUTHORITY="$HOME/.Xauthority"
+LOGFILE="$HOME/megasync.log"
+echo "Starting MEGAsync at $(date)" >> "$LOGFILE"
 
-# Launch MEGAsync inside Distrobox
-distrobox-enter --name f40 -- bash -c 'export DISPLAY=:0; export QT_QPA_PLATFORM=xcb; megasync' &
+# set display
+if [ -z "$DISPLAY" ]; then
+    export DISPLAY=":1"
+fi
+
+export XAUTHORITY="$HOME/.Xauthority"
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"  # Fix XDG_RUNTIME_DIR issue, thanks solus
+
+echo "DISPLAY=$DISPLAY" >> "$LOGFILE"
+echo "XAUTHORITY=$XAUTHORITY" >> "$LOGFILE"
+echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> "$LOGFILE"
+
+# access to fucking X11
+xhost +SI:localuser:tolga >> "$LOGFILE" 2>&1
+distrobox-enter --name f40 -- bash -c "export DISPLAY=$DISPLAY; export QT_QPA_PLATFORM=xcb; megasync" >> "$LOGFILE" 2>&1 &
+
 ```

@@ -1,7 +1,7 @@
 # MegaSync Woes
 
 
-* Location: `/home/tolga/.config/autostart/`
+* Location: `/home/tolga/.config/autostart/megasync.desktop`
 
 ```bash
 [Desktop Entry]
@@ -18,7 +18,7 @@ StartupNotify=false
 X-GNOME-Autostart-Delay=1
 ```
 
-* Location: `/home/tolga/`
+* Location: `/home/tolga/start_megasync.sh`
 
 ```bash
 #!/bin/bash

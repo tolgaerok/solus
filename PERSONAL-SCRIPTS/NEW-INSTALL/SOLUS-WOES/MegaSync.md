@@ -1,5 +1,11 @@
 # MegaSync Woes
 
+### Do the following
+```bash
+touch ~/megasync.log
+chmod 644 ~/megasync.log
+```
+
 ```bash
 [Desktop Entry]
 Type=Application

@@ -12,7 +12,7 @@ Exec=bash -c "sleep 1 && xhost +SI:localuser:tolga && /home/tolga/start_megasync
 Icon=mega
 Terminal=false
 StartupNotify=false
-X-GNOME-Autostart-Delay=5
+X-GNOME-Autostart-Delay=1
 ```
 
 ```bash

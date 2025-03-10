@@ -1,6 +1,11 @@
 # MegaSync Woes
 
 
+![alt text](image.png)
+
+*MegaSync autostarting in Wayland / X11 sessions (Reboot and logout/in)*
+
+#
 * Location: `/home/tolga/.config/autostart/megasync.desktop`
 
 ```bash
@@ -54,6 +59,8 @@ chmod 644 ~/megasync.log
 chmod +x /home/tolga/start_megasync.sh
 chmod +x ~/.config/autostart/megasync.desktop
 ```
+
+
 
 #
 

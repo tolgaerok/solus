@@ -1,0 +1,5 @@
+sudo eopkg delete-cache
+sudo eopkg rebuild-db -y
+sudo eopkg update-repo
+sudo eopkg upgrade glibc systemd eopkg curl
+sudo eopkg upgrade
